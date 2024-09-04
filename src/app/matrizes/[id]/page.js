@@ -2,25 +2,35 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
 
 export default function MatrizDetailsPage() {
   const [form, setForm] = useState(null);
+  const [filhotes, setFilhotes] = useState([]);
   const router = useRouter();
   const { id } = useParams();
 
   useEffect(() => {
     const fetchMatriz = async () => {
-      const res = await fetch(`/api/matrizes/${id}`);
-      const data = await res.json();
-      if (res.ok) {
-        setForm({
-          ...data,
-          dataNascimento: data.dataNascimento
-            ? new Date(data.dataNascimento).toISOString().split("T")[0]
-            : "",
-        });
-      } else {
-        console.error("Erro ao carregar matriz:", data.message);
+      try {
+        const res = await fetch(`/api/matrizes/${id}`);
+        const data = await res.json();
+        if (res.ok) {
+          setForm({
+            ...data,
+            dataNascimento: data.dataNascimento
+              ? new Date(data.dataNascimento).toISOString().split("T")[0]
+              : "",
+          });
+          // Carrega os filhotes associados à matriz específica
+          const resFilhotes = await fetch(`/api/filhotes?matriz=${id}`);
+          const filhotesData = await resFilhotes.json();
+          setFilhotes(filhotesData);
+        } else {
+          console.error("Erro ao carregar matriz:", data.message);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar matriz:", error);
       }
     };
 
@@ -54,7 +64,7 @@ export default function MatrizDetailsPage() {
         console.error("Erro ao atualizar matriz:", errorData.message);
       }
     } catch (error) {
-      console.error("Failed to update matriz", error);
+      console.error("Erro ao atualizar matriz", error);
     }
   };
 
@@ -124,7 +134,7 @@ export default function MatrizDetailsPage() {
           >
             <option value="NO">Normal (NO)</option>
             <option value="MO">Morta (MO)</option>
-            <option value="SU">Sumiu (SU)</option> {/* Atualizado */}
+            <option value="SU">Sumiu (SU)</option>
             <option value="VE">Vendida (VE)</option>
           </select>
         </div>
@@ -156,7 +166,7 @@ export default function MatrizDetailsPage() {
           >
             <option value="NO">Normal (NO)</option>
             <option value="MO">Morta (MO)</option>
-            <option value="SU">Sumiu (SU)</option> {/* Atualizado */}
+            <option value="SU">Sumiu (SU)</option>
             <option value="VE">Vendida (VE)</option>
           </select>
         </div>
@@ -180,6 +190,46 @@ export default function MatrizDetailsPage() {
           Voltar para a Listagem
         </button>
       </form>
+
+      {/* Histórico de Filhotes */}
+      <h2 className="text-xl font-bold mt-6 mb-2">Histórico de Filhotes</h2>
+      {filhotes.length > 0 ? (
+        <table className="min-w-full bg-white">
+          <thead>
+            <tr>
+              <th className="py-2">Data de Nascimento</th>
+              <th className="py-2">Situação</th>
+              <th className="py-2">Previsão de Desmama</th>
+              <th className="py-2">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filhotes.map((filhote) => (
+              <tr
+                key={filhote._id}
+                className="hover:bg-gray-100 cursor-pointer"
+              >
+                <td className="border px-4 py-2">
+                  {new Date(filhote.dataNascimento).toLocaleDateString()}
+                </td>
+                <td className="border px-4 py-2">{filhote.situacao}</td>
+                <td className="border px-4 py-2">
+                  {new Date(filhote.previsaoDesmama).toLocaleDateString()}
+                </td>
+                <td className="border px-4 py-2">
+                  <Link href={`/filhotes/${filhote._id}`}>
+                    <button className="bg-yellow-500 text-white p-2 rounded">
+                      Editar
+                    </button>
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>Nenhum filhote associado a esta matriz.</p>
+      )}
     </div>
   );
 }

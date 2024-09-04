@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Select from "react-select";
 
 export default function NewFilhotePage() {
   const [form, setForm] = useState({
@@ -14,10 +15,23 @@ export default function NewFilhotePage() {
   });
 
   const [matrizes, setMatrizes] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchMatrizes = async () => {
+      const res = await fetch("/api/matrizes");
+      const data = await res.json();
+      const formattedMatrizes = data.map((matriz) => ({
+        value: matriz._id,
+        label: `${matriz.nome} - ${matriz.numero}`,
+      }));
+      setMatrizes(formattedMatrizes);
+    };
+
+    fetchMatrizes();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,6 +62,13 @@ export default function NewFilhotePage() {
     }
   };
 
+  const handleSelectChange = (selectedOption) => {
+    setForm({
+      ...form,
+      matriz: selectedOption.value,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitDisabled) return;
@@ -70,14 +91,6 @@ export default function NewFilhotePage() {
     router.push("/filhotes");
   };
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const filteredMatrizes = matrizes.filter((matriz) =>
-    matriz.nome.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
@@ -92,27 +105,14 @@ export default function NewFilhotePage() {
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-gray-700">Matriz (Mãe)</label>
-          <input
-            type="text"
-            placeholder="Buscar matriz por nome..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="border p-2 w-full mb-2"
-          />
-          <select
-            name="matriz"
-            value={form.matriz}
-            onChange={handleChange}
+          <Select
+            options={matrizes}
+            onChange={handleSelectChange}
             className="border p-2 w-full"
+            placeholder="Selecione uma matriz..."
+            isSearchable
             required
-          >
-            <option value="">Selecione a Matriz</option>
-            {filteredMatrizes.map((matriz) => (
-              <option key={matriz._id} value={matriz._id}>
-                {matriz.nome} - {matriz.numero}
-              </option>
-            ))}
-          </select>
+          />
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Data de Nascimento</label>

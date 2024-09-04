@@ -3,9 +3,23 @@ import connectToDatabase from "@/lib/mongoose";
 import Filhote from "@/models/Filhote";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request) {
   await connectToDatabase();
-  const filhotes = await Filhote.find({}).populate("matriz").lean();
+
+  // Obter o 'matriz' id dos parâmetros de consulta
+  const { searchParams } = new URL(request.url);
+  const matrizId = searchParams.get("matriz");
+
+  let filhotes;
+  if (matrizId) {
+    // Buscar filhotes associados à matriz específica
+    filhotes = await Filhote.find({ matriz: matrizId })
+      .populate("matriz")
+      .lean();
+  } else {
+    // Se nenhum 'matrizId' for fornecido, retornar todos os filhotes
+    filhotes = await Filhote.find({}).populate("matriz").lean();
+  }
 
   return NextResponse.json(filhotes);
 }
