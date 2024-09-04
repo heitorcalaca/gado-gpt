@@ -1,11 +1,14 @@
-// src/lib/mongoose.js
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI_DEV = process.env.MONGODB_URI_DEV;
+const MONGODB_URI_PROD = process.env.MONGODB_URI_PROD;
+
+const MONGODB_URI =
+  process.env.NODE_ENV === "production" ? MONGODB_URI_PROD : MONGODB_URI_DEV;
 
 if (!MONGODB_URI) {
   throw new Error(
-    "Please define the MONGODB_URI environment variable inside .env.local"
+    "Please define the MONGODB_URI_DEV and MONGODB_URI_PROD environment variables inside .env.local or in the production environment"
   );
 }
 
