@@ -6,7 +6,9 @@ import Link from "next/link";
 
 export default async function FilhotesPage() {
   await connectToDatabase();
-  const filhotes = await Filhote.find({}).populate("matriz").lean();
+  const filhotes = await Filhote.find({ situacao: { $ne: "DE" } })
+    .populate("matriz")
+    .lean();
 
   return (
     <div className="container mx-auto p-4">

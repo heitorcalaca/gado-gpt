@@ -1,8 +1,8 @@
 // src/app/matrizes/new/page.js
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function NewMatrizPage() {
   const [form, setForm] = useState({
@@ -17,8 +17,35 @@ export default function NewMatrizPage() {
     situacaoMae: "NO",
     observacao: "",
   });
-
+  const [filhoteId, setFilhoteId] = useState(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const nomeMae = searchParams.get("nomeMae");
+    const nomePai = searchParams.get("nomePai");
+    const dataNascimento = searchParams.get("dataNascimento");
+    const numeroMatriz = searchParams.get("numeroMatriz");
+    const proprietario = searchParams.get("proprietario");
+    const filhoteIdParam = searchParams.get("filhoteId");
+
+    if (nomeMae || nomePai || dataNascimento || numeroMatriz || proprietario) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        nomeMae: nomeMae || "",
+        nomePai: nomePai || "",
+        dataNascimento: dataNascimento
+          ? new Date(dataNascimento).toISOString().split("T")[0]
+          : "",
+        numero: numeroMatriz || "",
+        proprietario: proprietario || "",
+      }));
+    }
+
+    if (filhoteIdParam) {
+      setFilhoteId(filhoteIdParam); // Salva o ID do filhote para futura atualização
+    }
+  }, [searchParams]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,16 +58,28 @@ export default function NewMatrizPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await fetch("/api/matrizes", {
+      // Salva a nova matriz
+      const matrizRes = await fetch("/api/matrizes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(form),
       });
-      router.push("/matrizes");
+
+      if (matrizRes.ok) {
+        // Agora que a matriz foi criada, marca o filhote como desmamado
+        if (filhoteId) {
+          await fetch(`/api/filhotes/${filhoteId}/desmamar`, {
+            method: "PUT",
+          });
+        }
+        router.push("/matrizes");
+      } else {
+        console.error("Erro ao cadastrar matriz");
+      }
     } catch (error) {
-      console.error("Failed to submit form", error);
+      console.error("Erro ao salvar matriz", error);
     }
   };
 

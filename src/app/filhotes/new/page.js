@@ -1,8 +1,9 @@
+// src/app/filhotes/new/page.js
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Select from "react-select";
+import { useRouter } from "next/navigation";
 
 export default function NewFilhotePage() {
   const [form, setForm] = useState({
@@ -11,23 +12,26 @@ export default function NewFilhotePage() {
     previsaoDesmama: "",
     caracteristicas: "",
     situacao: "NO",
-    observacao: "",
+    sexo: "", // Novo campo
+    nomePai: "", // Novo campo
   });
-
   const [matrizes, setMatrizes] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const fetchMatrizes = async () => {
-      const res = await fetch("/api/matrizes");
-      const data = await res.json();
-      const formattedMatrizes = data.map((matriz) => ({
-        value: matriz._id,
-        label: `${matriz.nome} - ${matriz.numero}`,
-      }));
-      setMatrizes(formattedMatrizes);
+      try {
+        const res = await fetch("/api/matrizes");
+        const data = await res.json();
+        setMatrizes(
+          data.map((matriz) => ({
+            value: matriz._id,
+            label: `${matriz.nome} - ${matriz.numero}`,
+          }))
+        );
+      } catch (error) {
+        console.error("Erro ao carregar matrizes:", error);
+      }
     };
 
     fetchMatrizes();
@@ -41,11 +45,8 @@ export default function NewFilhotePage() {
     });
 
     if (name === "dataNascimento") {
-      try {
-        const dataNascimento = new Date(value);
-        if (isNaN(dataNascimento.getTime())) {
-          throw new Error("Invalid date");
-        }
+      const dataNascimento = new Date(value);
+      if (!isNaN(dataNascimento.getTime())) {
         const previsaoDesmama = new Date(
           dataNascimento.setMonth(dataNascimento.getMonth() + 9)
         );
@@ -53,11 +54,6 @@ export default function NewFilhotePage() {
           ...prevForm,
           previsaoDesmama: previsaoDesmama.toISOString().split("T")[0],
         }));
-        setErrorMessage("");
-        setIsSubmitDisabled(false);
-      } catch (error) {
-        setErrorMessage("Data inválida. Por favor, insira uma data válida.");
-        setIsSubmitDisabled(true);
       }
     }
   };
@@ -71,19 +67,21 @@ export default function NewFilhotePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isSubmitDisabled) return;
-
     try {
-      await fetch("/api/filhotes", {
+      const res = await fetch("/api/filhotes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(form),
       });
-      router.push("/filhotes");
+      if (res.ok) {
+        router.push("/filhotes");
+      } else {
+        console.error("Erro ao cadastrar filhote:", res.statusText);
+      }
     } catch (error) {
-      console.error("Failed to submit form", error);
+      console.error("Erro ao cadastrar filhote:", error);
     }
   };
 
@@ -94,8 +92,9 @@ export default function NewFilhotePage() {
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Adicionar Novo Filhote</h1>
+        <h1 className="text-2xl font-bold">Novo Filhote</h1>
         <button
+          type="button"
           onClick={handleBack}
           className="bg-gray-500 text-white p-2 rounded"
         >
@@ -109,9 +108,9 @@ export default function NewFilhotePage() {
             options={matrizes}
             onChange={handleSelectChange}
             className="border p-2 w-full"
+            value={matrizes.find((option) => option.value === form.matriz)}
             placeholder="Selecione uma matriz..."
             isSearchable
-            required
           />
         </div>
         <div className="mb-4">
@@ -124,7 +123,6 @@ export default function NewFilhotePage() {
             className="border p-2 w-full"
             required
           />
-          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Previsão de Desmama</label>
@@ -137,6 +135,29 @@ export default function NewFilhotePage() {
           />
         </div>
         <div className="mb-4">
+          <label className="block text-gray-700">Sexo</label>
+          <select
+            name="sexo"
+            value={form.sexo}
+            onChange={handleChange}
+            className="border p-2 w-full"
+            required
+          >
+            <option value="">Selecione o sexo...</option>
+            <option value="Macho">Macho</option>
+            <option value="Fêmea">Fêmea</option>
+          </select>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Nome do Pai</label>
+          <input
+            name="nomePai"
+            value={form.nomePai}
+            onChange={handleChange}
+            className="border p-2 w-full"
+          />
+        </div>
+        <div className="mb-4">
           <label className="block text-gray-700">Características</label>
           <textarea
             name="caracteristicas"
@@ -145,36 +166,8 @@ export default function NewFilhotePage() {
             className="border p-2 w-full"
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Situação</label>
-          <select
-            name="situacao"
-            value={form.situacao}
-            onChange={handleChange}
-            className="border p-2 w-full"
-            required
-          >
-            <option value="NO">Normal (NO)</option>
-            <option value="MO">Morto (MO)</option>
-            <option value="SU">Sumiu (SU)</option>
-            <option value="VE">Vendido (VE)</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Observação</label>
-          <textarea
-            name="observacao"
-            value={form.observacao}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white p-2 rounded"
-          disabled={isSubmitDisabled}
-        >
-          Adicionar Filhote
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+          Cadastrar Filhote
         </button>
       </form>
     </div>

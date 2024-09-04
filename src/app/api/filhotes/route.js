@@ -12,13 +12,15 @@ export async function GET(request) {
 
   let filhotes;
   if (matrizId) {
-    // Buscar filhotes associados à matriz específica
-    filhotes = await Filhote.find({ matriz: matrizId })
+    // Buscar filhotes associados à matriz específica que ainda não foram desmamados (situação != 'DE')
+    filhotes = await Filhote.find({ matriz: matrizId, situacao: { $ne: "DE" } })
       .populate("matriz")
       .lean();
   } else {
-    // Se nenhum 'matrizId' for fornecido, retornar todos os filhotes
-    filhotes = await Filhote.find({}).populate("matriz").lean();
+    // Se nenhum 'matrizId' for fornecido, retornar todos os filhotes que não foram desmamados
+    filhotes = await Filhote.find({ situacao: { $ne: "DE" } })
+      .populate("matriz")
+      .lean();
   }
 
   return NextResponse.json(filhotes);

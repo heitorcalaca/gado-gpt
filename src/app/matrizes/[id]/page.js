@@ -217,11 +217,16 @@ export default function MatrizDetailsPage() {
                   {new Date(filhote.previsaoDesmama).toLocaleDateString()}
                 </td>
                 <td className="border px-4 py-2">
-                  <Link href={`/filhotes/${filhote._id}`}>
-                    <button className="bg-yellow-500 text-white p-2 rounded">
-                      Editar
-                    </button>
-                  </Link>
+                  {/* Verifica se o filhote não foi desmamado */}
+                  {new Date(filhote.previsaoDesmama) > new Date() ? (
+                    <Link href={`/filhotes/${filhote._id}`}>
+                      <button className="bg-yellow-500 text-white p-2 rounded">
+                        Editar
+                      </button>
+                    </Link>
+                  ) : (
+                    <span className="text-gray-500">Desmamado</span>
+                  )}
                 </td>
               </tr>
             ))}
@@ -230,6 +235,13 @@ export default function MatrizDetailsPage() {
       ) : (
         <p>Nenhum filhote associado a esta matriz.</p>
       )}
+      <button
+        type="button"
+        onClick={handleBack}
+        className="bg-gray-500 text-white p-2 rounded mt-4"
+      >
+        Voltar para a Listagem
+      </button>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 // src/app/filhotes/[id]/page.js
 import connectToDatabase from "@/lib/mongoose";
 import Filhote from "@/models/Filhote";
-import FilhoteDetails from "./FIlhoteDetails";
+import FilhoteDetails from "./FilhoteDetails";
 
 export default async function FilhoteDetailsPage({ params }) {
   await connectToDatabase();
