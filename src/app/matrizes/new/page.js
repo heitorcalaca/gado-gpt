@@ -1,10 +1,10 @@
 // src/app/matrizes/new/page.js
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-function NewMatrizForm() {
+export default function NewMatrizPage() {
   const [form, setForm] = useState({
     nome: "",
     numero: "",
@@ -197,13 +197,5 @@ function NewMatrizForm() {
         </button>
       </form>
     </div>
-  );
-}
-
-export default function NewMatrizPage() {
-  return (
-    <Suspense fallback={<div>Carregando...</div>}>
-      <NewMatrizForm />
-    </Suspense>
   );
 }
