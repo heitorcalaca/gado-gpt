@@ -1,7 +1,7 @@
 // src/app/filhotes/[id]/page.js
 import connectToDatabase from "@/lib/mongoose";
 import Filhote from "@/models/Filhote";
-import FilhoteDetails from "./FilhoteDetails";
+import FilhoteDetails from "./FIlhoteDetails";
 
 export default async function FilhoteDetailsPage({ params }) {
   await connectToDatabase();
@@ -11,9 +11,8 @@ export default async function FilhoteDetailsPage({ params }) {
     return <div>Filhote não encontrado</div>;
   }
 
-  // Convertendo _id para string
-  filhote._id = filhote._id.toString();
-  filhote.matriz._id = filhote.matriz._id.toString();
+  // Converte o objeto do MongoDB para um plain object
+  const plainFilhote = JSON.parse(JSON.stringify(filhote));
 
-  return <FilhoteDetails initialData={filhote} />;
+  return <FilhoteDetails initialData={plainFilhote} />;
 }

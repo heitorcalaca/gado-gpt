@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function NewFilhotePage() {
@@ -15,17 +15,9 @@ export default function NewFilhotePage() {
 
   const [matrizes, setMatrizes] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    const fetchMatrizes = async () => {
-      const res = await fetch("/api/matrizes");
-      const data = await res.json();
-      setMatrizes(data);
-    };
-
-    fetchMatrizes();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,19 +27,31 @@ export default function NewFilhotePage() {
     });
 
     if (name === "dataNascimento") {
-      const dataNascimento = new Date(value);
-      const previsaoDesmama = new Date(
-        dataNascimento.setMonth(dataNascimento.getMonth() + 9)
-      );
-      setForm((prevForm) => ({
-        ...prevForm,
-        previsaoDesmama: previsaoDesmama.toISOString().split("T")[0],
-      }));
+      try {
+        const dataNascimento = new Date(value);
+        if (isNaN(dataNascimento.getTime())) {
+          throw new Error("Invalid date");
+        }
+        const previsaoDesmama = new Date(
+          dataNascimento.setMonth(dataNascimento.getMonth() + 9)
+        );
+        setForm((prevForm) => ({
+          ...prevForm,
+          previsaoDesmama: previsaoDesmama.toISOString().split("T")[0],
+        }));
+        setErrorMessage("");
+        setIsSubmitDisabled(false);
+      } catch (error) {
+        setErrorMessage("Data inválida. Por favor, insira uma data válida.");
+        setIsSubmitDisabled(true);
+      }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitDisabled) return;
+
     try {
       await fetch("/api/filhotes", {
         method: "POST",
@@ -120,6 +124,7 @@ export default function NewFilhotePage() {
             className="border p-2 w-full"
             required
           />
+          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Previsão de Desmama</label>
@@ -164,7 +169,11 @@ export default function NewFilhotePage() {
             className="border p-2 w-full"
           />
         </div>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+        <button
+          type="submit"
+          className="bg-blue-500 text-white p-2 rounded"
+          disabled={isSubmitDisabled}
+        >
           Adicionar Filhote
         </button>
       </form>
