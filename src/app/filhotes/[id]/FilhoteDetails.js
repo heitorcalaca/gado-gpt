@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Select from "react-select";
 
 export default function FilhoteDetails({ initialData }) {
   const [form, setForm] = useState({
