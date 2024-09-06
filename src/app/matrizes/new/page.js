@@ -1,5 +1,5 @@
 // src/app/matrizes/new/page.js
-"use client"; // Garantir que este é um componente client-side
+"use client";
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -22,12 +22,12 @@ export default function NewMatrizPage() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const nomeMae = searchParams.get("nomeMae");
-    const nomePai = searchParams.get("nomePai");
-    const dataNascimento = searchParams.get("dataNascimento");
-    const numeroMatriz = searchParams.get("numeroMatriz");
-    const proprietario = searchParams.get("proprietario");
-    const filhoteIdParam = searchParams.get("filhoteId");
+    const nomeMae = searchParams?.get("nomeMae");
+    const nomePai = searchParams?.get("nomePai");
+    const dataNascimento = searchParams?.get("dataNascimento");
+    const numeroMatriz = searchParams?.get("numeroMatriz");
+    const proprietario = searchParams?.get("proprietario");
+    const filhoteIdParam = searchParams?.get("filhoteId");
 
     if (nomeMae || nomePai || dataNascimento || numeroMatriz || proprietario) {
       setForm((prevForm) => ({
