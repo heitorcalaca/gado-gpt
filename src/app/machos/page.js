@@ -1,1 +1,3 @@
-<h1>Machos</h1>;
+export default function MachosListPage() {
+  return <h1>Machos</h1>;
+}
