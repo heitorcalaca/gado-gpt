@@ -1,4 +1,3 @@
-// src/app/matrizes/new/page.js
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
@@ -88,114 +87,158 @@ function NewMatrizForm() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Nova Matriz</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-gray-700">Nome</label>
-          <input
-            name="nome"
-            value={form.nome}
-            onChange={handleChange}
-            className="border p-2 w-full"
-            required
-          />
+    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <header className="bg-white shadow">
+        <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            Nova Matriz
+          </h1>
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Número</label>
-          <input
-            name="numero"
-            value={form.numero}
-            onChange={handleChange}
-            className="border p-2 w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Características</label>
-          <input
-            name="caracteristicas"
-            value={form.caracteristicas}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Data de Nascimento</label>
-          <input
-            type="date"
-            name="dataNascimento"
-            value={form.dataNascimento}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Proprietário</label>
-          <input
-            name="proprietario"
-            value={form.proprietario}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Situação</label>
-          <select
-            name="situacao"
-            value={form.situacao}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          >
-            <option value="NO">Normal (NO)</option>
-            <option value="MO">Morta (MO)</option>
-            <option value="SU">Sumiu (SU)</option>
-            <option value="VE">Vendida (VE)</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Nome do Pai</label>
-          <input
-            name="nomePai"
-            value={form.nomePai}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Nome da Mãe</label>
-          <input
-            name="nomeMae"
-            value={form.nomeMae}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Situação da Mãe</label>
-          <select
-            name="situacaoMae"
-            value={form.situacaoMae}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          >
-            <option value="NO">Normal (NO)</option>
-            <option value="MO">Morta (MO)</option>
-            <option value="SU">Sumiu (SU)</option>
-            <option value="VE">Vendida (VE)</option>
-          </select>
-        </div>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-          Cadastrar
-        </button>
-        <button
-          type="button"
-          onClick={handleBack}
-          className="bg-gray-500 text-white p-2 rounded"
+      </header>
+
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-3xl">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2"
         >
-          Voltar para a Listagem
-        </button>
-      </form>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Nome
+            </label>
+            <input
+              name="nome"
+              value={form.nome}
+              onChange={handleChange}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Número
+            </label>
+            <input
+              name="numero"
+              value={form.numero}
+              onChange={handleChange}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Características
+            </label>
+            <input
+              name="caracteristicas"
+              value={form.caracteristicas}
+              onChange={handleChange}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Data de Nascimento
+            </label>
+            <input
+              type="date"
+              name="dataNascimento"
+              value={form.dataNascimento}
+              onChange={handleChange}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Proprietário
+            </label>
+            <input
+              name="proprietario"
+              value={form.proprietario}
+              onChange={handleChange}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Situação
+            </label>
+            <select
+              name="situacao"
+              value={form.situacao}
+              onChange={handleChange}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            >
+              <option value="NO">Normal</option>
+              <option value="MO">Morta</option>
+              <option value="SU">Sumiu</option>
+              <option value="VE">Vendida</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Nome do Pai
+            </label>
+            <input
+              name="nomePai"
+              value={form.nomePai}
+              onChange={handleChange}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Nome da Mãe
+            </label>
+            <input
+              name="nomeMae"
+              value={form.nomeMae}
+              onChange={handleChange}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Situação da Mãe
+            </label>
+            <select
+              name="situacaoMae"
+              value={form.situacaoMae}
+              onChange={handleChange}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            >
+              <option value="NO">Normal</option>
+              <option value="MO">Morta</option>
+              <option value="SU">Sumiu</option>
+              <option value="VE">Vendida</option>
+            </select>
+          </div>
+
+          <div className="sm:col-span-2 flex gap-4">
+            <button
+              type="submit"
+              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Cadastrar
+            </button>
+            <button
+              type="button"
+              onClick={handleBack}
+              className="flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+            >
+              Voltar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

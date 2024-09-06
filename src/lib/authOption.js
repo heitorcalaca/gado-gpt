@@ -22,8 +22,8 @@ export const authOptions = {
           user &&
           (await bcrypt.compare(credentials.password, user.password))
         ) {
-          // Se a senha estiver correta, retorna os dados do usuário
-          return { id: user._id, email: user.email };
+          // Retorna os dados do usuário, incluindo o nome
+          return { id: user._id, email: user.email, name: user.name };
         }
         return null;
       },
@@ -31,6 +31,24 @@ export const authOptions = {
   ],
   session: {
     strategy: "jwt",
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      // Adicionar o nome do usuário ao token JWT
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Adicionar o nome do usuário à sessão
+      session.user.id = token.id;
+      session.user.name = token.name;
+      session.user.email = token.email;
+      return session;
+    },
   },
   pages: {
     signIn: "/auth/login",
