@@ -18,6 +18,7 @@ const FilhoteSchema = new mongoose.Schema({
   sexo: { type: String, enum: ["Macho", "Fêmea"], required: true }, // Novo campo
   nomePai: { type: String }, // Novo campo
   observacao: String,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Adiciona o campo userId
 });
 
 export default mongoose.models.Filhote ||

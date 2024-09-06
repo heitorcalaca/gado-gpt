@@ -13,6 +13,7 @@ const MatrizSchema = new mongoose.Schema({
   situacaoMae: { type: String, enum: ["NO", "MO", "SU", "VE"], default: "NO" },
   observacao: String,
   filhotes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Filhote" }],
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Adiciona o campo userId
 });
 
 export default mongoose.models.Matriz || mongoose.model("Matriz", MatrizSchema);
