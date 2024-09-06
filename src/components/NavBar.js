@@ -7,10 +7,10 @@ import Link from "next/link";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", current: true },
-  { name: "Team", href: "/team", current: false },
-  { name: "Projects", href: "/projects", current: false },
-  { name: "Calendar", href: "/calendar", current: false },
-  { name: "Reports", href: "/reports", current: false },
+  { name: "Matrizes", href: "/matrizes", current: false },
+  { name: "Filhotes", href: "/filhotes", current: false },
+  { name: "Machos", href: "/machos", current: false },
+  { name: "Relatórios", href: "/reports", current: false },
 ];
 
 const userNavigation = [
@@ -34,8 +34,6 @@ export default function NavBar() {
 
   // Se o nome não estiver disponível, use "G" como padrão
   const userInitial = user.name ? user.name.charAt(0).toUpperCase() : "G";
-
-  console.log("Sessão atual:", session);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">

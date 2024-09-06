@@ -16,7 +16,11 @@
   }
 }
 
+html,
 body {
+  height: 100%; /* Garante que o background ocupe toda a altura da página */
+  margin: 0;
+  padding: 0;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
@@ -24,6 +28,10 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  background-size: cover; /* Faz com que o background cubra toda a página */
+  background-position: center center; /* Centraliza o background */
+  background-repeat: no-repeat; /* Impede a repetição do background */
+  background-attachment: fixed; /* Mantém o background fixo ao rolar a página */
 }
 
 @layer utilities {

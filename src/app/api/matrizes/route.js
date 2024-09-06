@@ -2,22 +2,25 @@
 import connectToDatabase from "@/lib/mongoose";
 import Matriz from "@/models/Matriz";
 import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOption"; // Certifique-se de que isso aponte para onde você configurou suas opções de autenticação
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request) {
   await connectToDatabase();
 
-  const session = await getServerSession(request);
-  const user = session?.user;
+  const session = await getServerSession(authOptions); // Obter sessão corretamente
 
-  if (!user) {
+  if (!session || !session.user) {
     return NextResponse.json(
-      { message: "Não autorizado. Por favor, Faça Login." },
+      { message: "Não autorizado. Por favor, faça login." },
       { status: 401 }
     );
   }
 
-  const matrizes = await Matriz.find({}).lean(); // Retorna objetos simples
+  const user = session.user;
+
+  // Busca matrizes associadas ao usuário logado
+  const matrizes = await Matriz.find({ userId: user.id }).lean();
 
   return NextResponse.json(matrizes);
 }
@@ -25,20 +28,40 @@ export async function GET() {
 export async function POST(request) {
   await connectToDatabase();
 
-  const session = await getServerSession(request);
-  const user = session?.user;
+  const session = await getServerSession(authOptions); // Obter sessão corretamente
 
-  if (!user) {
+  if (!session || !session.user) {
     return NextResponse.json(
       { message: "Não autorizado. Por favor, faça login." },
       { status: 401 }
     );
   }
 
+  const user = session.user;
+
   try {
     const data = await request.json();
 
-    // Adiciona o userId do usuário logado ao novo registro de matriz
+    // Verifica se o nome ou número já existem
+    const existingMatriz = await Matriz.findOne({
+      $or: [{ nome: data.nome }, { numero: data.numero }],
+    });
+
+    if (existingMatriz) {
+      const errors = {};
+      if (existingMatriz.nome === data.nome) {
+        errors.nome = "Este nome já está cadastrado.";
+      }
+      if (existingMatriz.numero === data.numero) {
+        errors.numero = "Este número já está cadastrado.";
+      }
+      return NextResponse.json(
+        { message: "Erro na validação", errors },
+        { status: 400 }
+      );
+    }
+
+    // Cria uma nova matriz associada ao usuário logado
     const newMatriz = new Matriz({
       ...data,
       userId: user.id, // Associa a matriz ao usuário logado
