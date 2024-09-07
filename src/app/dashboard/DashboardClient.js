@@ -7,19 +7,6 @@ import NavBar from "@/components/NavBar"; // Importa o NavBar para ser utilizado
 export default function DashboardClient() {
   const [desmamaAviso, setDesmamaAviso] = useState(null);
 
-  useEffect(() => {
-    const verificarDesmama = async () => {
-      const res = await fetch("/api/filhotes/desmama");
-      const data = await res.json();
-
-      if (data.length > 0) {
-        setDesmamaAviso(`${data.length} filhote(s) precisam ser desmamados.`);
-      }
-    };
-
-    verificarDesmama();
-  }, []);
-
   return (
     <div className="min-h-full">
       <header className="bg-white shadow">

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Disclosure, Menu } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
@@ -25,15 +26,40 @@ function classNames(...classes) {
 
 export default function NavBar() {
   const { data: session, status } = useSession();
+  const [notifications, setNotifications] = useState([]);
+  const [showNotificationPopup, setNotificationPopup] = useState(false);
+  const [notificationBellClicked, setNotificationBellClicked] = useState(false);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      if (session?.user) {
+        try {
+          const res = await fetch("/api/filhotes/desmama");
+          const data = await res.json();
+          if (data.length > 0) {
+            setNotifications(data);
+            setNotificationPopup(true); // Exibir popup no login
+          }
+        } catch (error) {
+          console.error("Erro ao buscar notificações de desmama:", error);
+        }
+      }
+    };
+
+    fetchNotifications();
+  }, [session]);
 
   if (status === "loading") {
     return <div>Carregando...</div>;
   }
 
   const user = session?.user || { name: "Guest", email: "guest@example.com" };
-
-  // Se o nome não estiver disponível, use "G" como padrão
   const userInitial = user.name ? user.name.charAt(0).toUpperCase() : "G";
+
+  const handleNotificationClick = () => {
+    setNotificationBellClicked(true);
+    setNotificationPopup((prevState) => !prevState); // Alternar o estado do popup ao clicar no sino
+  };
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -73,17 +99,24 @@ export default function NavBar() {
                 <div className="ml-4 flex items-center md:ml-6">
                   <button
                     type="button"
-                    className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    onClick={handleNotificationClick}
+                    className={`relative rounded-full p-1 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 ${
+                      notifications.length > 0
+                        ? "text-yellow-400"
+                        : "text-gray-400"
+                    }`}
                   >
                     <span className="sr-only">View notifications</span>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
+                    {notifications.length > 0 && (
+                      <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-600"></span>
+                    )}
                   </button>
 
                   <Menu as="div" className="relative ml-3">
                     <div>
                       <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                         <span className="sr-only">Open user menu</span>
-                        {/* Exibe a inicial do nome do usuário */}
                         <div className="flex items-center justify-center h-8 w-8 rounded-full bg-gray-500 text-white">
                           {userInitial}
                         </div>
@@ -176,6 +209,22 @@ export default function NavBar() {
               </div>
             </div>
           </Disclosure.Panel>
+
+          {/* Popup de notificação saindo do sino */}
+          {showNotificationPopup && notifications.length > 0 && (
+            <div className="absolute right-16 top-16 bg-yellow-300 shadow-lg p-4 rounded-md border border-gray-200 z-50 transition-all transform translate-y-5 opacity-100">
+              <h4 className="text-base font-semibold">Notificações</h4>
+              <p className="text-base">
+                {notifications.length} filhote(s) precisam ser desmamados.
+              </p>
+              <button
+                onClick={() => setNotificationPopup(false)}
+                className="mt-2 bg-slate-700 text-white px-3 py-1 rounded"
+              >
+                Fechar
+              </button>
+            </div>
+          )}
         </>
       )}
     </Disclosure>

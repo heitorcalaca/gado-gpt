@@ -1,13 +1,37 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import connectToDatabase from "@/lib/mongoose";
-import Matriz from "@/models/Matriz";
 import MatrizesTable from "./MatrizesTable";
 import PrintButton from "./PrintButton";
 
-export default async function MatrizesPage() {
-  await connectToDatabase();
-  const matrizes = await Matriz.find({});
-  const plainMatrizes = JSON.parse(JSON.stringify(matrizes)); // Converte para plain objects
+export default function MatrizesPage() {
+  const [matrizes, setMatrizes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMatrizes = async () => {
+      try {
+        const res = await fetch("/api/matrizes"); // Fazendo a requisição GET para buscar matrizes
+        if (res.ok) {
+          const data = await res.json();
+          setMatrizes(data);
+        } else {
+          console.error("Erro ao carregar matrizes:", res.statusText);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar matrizes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMatrizes();
+  }, []);
+
+  if (loading) {
+    return <div>Carregando matrizes...</div>;
+  }
 
   return (
     <div className="min-h-full">
@@ -31,10 +55,10 @@ export default async function MatrizesPage() {
                 Adicionar Nova Matriz
               </button>
             </Link>
-            <PrintButton matrizes={plainMatrizes} />
+            <PrintButton matrizes={matrizes} />
           </div>
           <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <MatrizesTable matrizes={plainMatrizes} />
+            <MatrizesTable matrizes={matrizes} />
           </div>
         </div>
       </main>

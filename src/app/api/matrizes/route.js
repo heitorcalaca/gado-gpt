@@ -6,11 +6,16 @@ import { authOptions } from "@/lib/authOption"; // Certifique-se de que isso apo
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
+  console.log("Iniciando a busca de matrizes"); // Log inicial
+
   await connectToDatabase();
+  console.log("Conexão com o banco de dados estabelecida");
 
   const session = await getServerSession(authOptions); // Obter sessão corretamente
+  console.log("Sessão obtida:", session); // Verifique se a sessão foi obtida
 
   if (!session || !session.user) {
+    console.log("Não autorizado. Sessão inválida.");
     return NextResponse.json(
       { message: "Não autorizado. Por favor, faça login." },
       { status: 401 }
@@ -18,11 +23,20 @@ export async function GET(request) {
   }
 
   const user = session.user;
+  console.log("Usuário Logado: ", user);
 
   // Busca matrizes associadas ao usuário logado
-  const matrizes = await Matriz.find({ userId: user.id }).lean();
-
-  return NextResponse.json(matrizes);
+  try {
+    const matrizes = await Matriz.find({ userId: user.id }).lean();
+    console.log("Matrizes do usuário logado:", matrizes); // Verifique se as matrizes corretas estão sendo retornadas
+    return NextResponse.json(matrizes);
+  } catch (error) {
+    console.error("Erro ao buscar matrizes:", error);
+    return NextResponse.json(
+      { message: "Erro ao buscar matrizes" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request) {
