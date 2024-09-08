@@ -8,5 +8,5 @@ export default withAuth({
 
 // Protegendo rotas específicas
 export const config = {
-  matcher: ["/matrizes/:path*", "/filhotes/:path*", "/dashboard/:path*"], // Adicione aqui as páginas que você quer proteger
+  matcher: ["/((?!_next|icon-cow.svg|auth/login|auth/register).*)"], // Adicione aqui as páginas que você quer proteger
 };

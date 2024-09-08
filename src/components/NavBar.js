@@ -5,20 +5,7 @@ import { Disclosure, Menu } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", current: true },
-  { name: "Matrizes", href: "/matrizes", current: false },
-  { name: "Filhotes", href: "/filhotes", current: false },
-  { name: "Machos", href: "/machos", current: false },
-  { name: "Relatórios", href: "/reports", current: false },
-];
-
-const userNavigation = [
-  { name: "Your Profile", href: "/profile" },
-  { name: "Settings", href: "/settings" },
-  { name: "Sign out", href: "#" },
-];
+import { usePathname } from "next/navigation";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -29,6 +16,25 @@ export default function NavBar() {
   const [notifications, setNotifications] = useState([]);
   const [showNotificationPopup, setNotificationPopup] = useState(false);
   const [notificationBellClicked, setNotificationBellClicked] = useState(false);
+  const pathname = usePathname();
+
+  const navigation = [
+    {
+      name: "Dashboard",
+      href: "/dashboard",
+      current: pathname === "/dashboard",
+    },
+    { name: "Matrizes", href: "/matrizes", current: pathname === "/matrizes" },
+    { name: "Filhotes", href: "/filhotes", current: pathname === "/filhotes" },
+    { name: "Machos", href: "/machos", current: pathname === "/machos" },
+    { name: "Relatórios", href: "/reports", current: pathname === "/reports" },
+  ];
+
+  const userNavigation = [
+    { name: "Perfil", href: "/profile" },
+    { name: "Configurações", href: "/settings" },
+    { name: "Sair", href: "#" },
+  ];
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -49,10 +55,6 @@ export default function NavBar() {
     fetchNotifications();
   }, [session]);
 
-  if (status === "loading") {
-    return <div>Carregando...</div>;
-  }
-
   const user = session?.user || { name: "Guest", email: "guest@example.com" };
   const userInitial = user.name ? user.name.charAt(0).toUpperCase() : "G";
 
@@ -70,8 +72,8 @@ export default function NavBar() {
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <img
-                    className="h-8 w-8"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                    className="h-9 w-9 invert"
+                    src="/icon-cow.svg"
                     alt="Your Company"
                   />
                 </div>
@@ -125,23 +127,31 @@ export default function NavBar() {
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
-                          {({ active }) => (
-                            <Link
-                              href={item.href === "#" ? "#" : item.href}
-                              onClick={
-                                item.name === "Sign out"
-                                  ? () =>
-                                      signOut({ callbackUrl: "/auth/login" })
-                                  : null
-                              }
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              {item.name}
-                            </Link>
-                          )}
+                          {({ active }) =>
+                            item.name === "Sair" ? (
+                              <button
+                                onClick={() =>
+                                  signOut({ callbackUrl: "/auth/login" })
+                                }
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700 w-full text-left"
+                                )}
+                              >
+                                {item.name}
+                              </button>
+                            ) : (
+                              <Link
+                                href={item.href}
+                                className={classNames(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                {item.name}
+                              </Link>
+                            )
+                          }
                         </Menu.Item>
                       ))}
                     </Menu.Items>

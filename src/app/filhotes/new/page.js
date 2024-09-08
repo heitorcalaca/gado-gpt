@@ -97,7 +97,7 @@ export default function NewFilhotePage() {
     router.push("/filhotes");
   };
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <header className="bg-white shadow">
         <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">
@@ -107,74 +107,61 @@ export default function NewFilhotePage() {
       </header>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-3xl">
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2"
-        >
+        <form onSubmit={handleSubmit} className="form-grid form-grid-2-cols">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Matriz (Mãe)
-            </label>
+            <label className="form-label">Matriz (Mãe)</label>
             <Select
               options={matrizes}
               onChange={handleSelectChange}
-              className="mt-2"
               value={matrizes.find((option) => option.value === form.matriz)}
               placeholder="Selecione uma matriz..."
               isSearchable
               isDisabled={form.filhoteAvulso}
+              classNamePrefix="react-select"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Filhote Avulso
-            </label>
+            <label className="form-label">Filhote Avulso</label>
             <input
               type="checkbox"
               name="filhoteAvulso"
               checked={form.filhoteAvulso}
               onChange={handleChange}
-              className="mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+              className="form-input h-4 w-4"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Data de Nascimento
-            </label>
+            <label className="form-label">Data de Nascimento</label>
             <input
               type="date"
               name="dataNascimento"
               value={form.dataNascimento}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm"
+              className="form-input"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Previsão de Desmama
-            </label>
+            <label className="form-label">Previsão de Desmama</label>
             <input
               type="date"
               name="previsaoDesmama"
               value={form.previsaoDesmama}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm"
+              className="form-input"
               readOnly
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Sexo
-            </label>
+            <label className="form-label">Sexo</label>
             <select
               name="sexo"
               value={form.sexo}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm"
+              className="form-select"
               required
             >
               <option value="">Selecione o sexo...</option>
@@ -184,52 +171,43 @@ export default function NewFilhotePage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Nome do Pai
-            </label>
+            <label className="form-label">Nome do Pai</label>
             <input
               name="nomePai"
               value={form.nomePai}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm"
+              className="form-input"
             />
           </div>
 
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700">
-              Características
-            </label>
+            <label className="form-label">Características</label>
             <input
               name="caracteristicas"
               value={form.caracteristicas}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm"
+              className="form-input"
             />
           </div>
 
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700">
-              Observações
-            </label>
+            <label className="form-label">Observações</label>
             <textarea
               name="observacao"
               value={form.observacao}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm"
+              className="form-textarea"
             />
           </div>
 
           <div className="sm:col-span-2 flex gap-4">
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white"
-            >
+            <button type="submit" className="form-button-primary">
               Cadastrar Filhote
             </button>
             <button
               type="button"
               onClick={handleBack}
-              className="flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white"
+              className="form-button-secondary"
             >
               Voltar
             </button>

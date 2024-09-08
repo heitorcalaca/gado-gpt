@@ -92,87 +92,102 @@ export default function FilhoteDetails({ initialData }) {
     }
   };
 
+  const handleBack = () => {
+    router.push("/filhotes");
+  };
+
   return (
     <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Editar Filhote</h1>
-        <button
-          type="button"
-          onClick={() => router.push("/filhotes")}
-          className="bg-gray-500 text-white p-2 rounded"
+      <header className="bg-white shadow">
+        <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            Detalhes do Filhote
+          </h1>
+        </div>
+      </header>
+      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 max-w-3xl mx-auto"
         >
-          Voltar para a Listagem
-        </button>
+          <div>
+            <label className="form-label">Matriz (Mãe)</label>
+            <Select
+              options={matrizes}
+              onChange={handleSelectChange}
+              classNamePrefix="react-select"
+              value={matrizes.find((option) => option.value === form.matriz)}
+              placeholder="Selecione uma matriz..."
+              isSearchable
+            />
+          </div>
+          <div>
+            <label className="form-label">Data de Nascimento</label>
+            <input
+              type="date"
+              name="dataNascimento"
+              value={form.dataNascimento}
+              onChange={handleChange}
+              className="form-input"
+              required
+            />
+          </div>
+          <div>
+            <label className="form-label">Previsão de Desmama</label>
+            <input
+              type="date"
+              name="previsaoDesmama"
+              value={form.previsaoDesmama}
+              className="form-input"
+              readOnly
+            />
+          </div>
+          <div>
+            <label className="form-label">Sexo</label>
+            <select
+              name="sexo"
+              value={form.sexo}
+              onChange={handleChange}
+              className="form-select"
+              required
+            >
+              <option value="">Selecione o sexo...</option>
+              <option value="Macho">Macho</option>
+              <option value="Fêmea">Fêmea</option>
+            </select>
+          </div>
+          <div>
+            <label className="form-label">Nome do Pai</label>
+            <input
+              name="nomePai"
+              value={form.nomePai}
+              onChange={handleChange}
+              className="form-input"
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="form-label">Características</label>
+            <textarea
+              name="caracteristicas"
+              value={form.caracteristicas}
+              onChange={handleChange}
+              className="form-textarea"
+            />
+          </div>
+          <div className="sm:col-span-2 flex gap-4">
+            <button type="submit" className="form-button-primary">
+              Atualizar Filhote
+            </button>
+            <button
+              type="button"
+              onClick={() => router.push("/filhotes")}
+              className="form-button-secondary"
+            >
+              Voltar para a Listagem
+            </button>
+          </div>
+        </form>
       </div>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-gray-700">Matriz (Mãe)</label>
-          <Select
-            options={matrizes}
-            onChange={handleSelectChange}
-            className="border p-2 w-full"
-            value={matrizes.find((option) => option.value === form.matriz)}
-            placeholder="Selecione uma matriz..."
-            isSearchable
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Data de Nascimento</label>
-          <input
-            type="date"
-            name="dataNascimento"
-            value={form.dataNascimento}
-            onChange={handleChange}
-            className="border p-2 w-full"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Previsão de Desmama</label>
-          <input
-            type="date"
-            name="previsaoDesmama"
-            value={form.previsaoDesmama}
-            className="border p-2 w-full"
-            readOnly
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Sexo</label>
-          <select
-            name="sexo"
-            value={form.sexo}
-            onChange={handleChange}
-            className="border p-2 w-full"
-            required
-          >
-            <option value="">Selecione o sexo...</option>
-            <option value="Macho">Macho</option>
-            <option value="Fêmea">Fêmea</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Nome do Pai</label>
-          <input
-            name="nomePai"
-            value={form.nomePai}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Características</label>
-          <textarea
-            name="caracteristicas"
-            value={form.caracteristicas}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
-        </div>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-          Atualizar Filhote
-        </button>
-      </form>
     </div>
   );
 }

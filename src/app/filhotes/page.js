@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import FilhotesList from "./FilhotesList";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function FilhotesPage() {
   const [filhotes, setFilhotes] = useState([]);
@@ -29,7 +30,7 @@ export default function FilhotesPage() {
   }, []);
 
   if (loading) {
-    return <div>Carregando filhotes...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

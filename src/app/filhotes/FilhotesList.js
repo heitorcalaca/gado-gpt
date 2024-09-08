@@ -46,12 +46,12 @@ export default function FilhotesList({ filhotes }) {
           placeholder="Buscar por matriz ou data..."
           value={searchTerm}
           onChange={handleSearch}
-          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm mb-2 py-2"
+          className="form-input mb-2"
         />
         <select
           value={situacaoFilter}
           onChange={handleSituacaoFilter}
-          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2"
+          className="form-input"
         >
           <option value="">Filtrar por Situação</option>
           <option value="NO">Normal (NO)</option>
@@ -61,48 +61,29 @@ export default function FilhotesList({ filhotes }) {
         </select>
       </div>
 
-      <table className="min-w-full bg-white shadow rounded-lg">
-        <thead className="bg-gray-50">
+      <table className="table">
+        <thead>
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Matriz (Mãe)
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Data de Nascimento
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Situação
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Previsão de Desmama
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Ações
-            </th>
+            <th>Matriz (Mãe)</th>
+            <th>Data de Nascimento</th>
+            <th>Situação</th>
+            <th>Previsão de Desmama</th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody>
           {filteredFilhotes.map((filhote) => (
-            <tr key={filhote._id} className="hover:bg-gray-100">
-              <td className="px-6 py-4 whitespace-nowrap">
+            <tr
+              key={filhote._id}
+              onDoubleClick={() =>
+                (window.location.href = `/filhotes/${filhote._id}`)
+              }
+            >
+              <td>
                 {filhote.matriz.nome} - {filhote.matriz.numero}
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {new Date(filhote.dataNascimento).toLocaleDateString()}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {filhote.situacao}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {new Date(filhote.previsaoDesmama).toLocaleDateString()}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <Link href={`/filhotes/${filhote._id}`}>
-                  <button className="inline-flex items-center justify-center rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                    Editar
-                  </button>
-                </Link>
-              </td>
+              <td>{new Date(filhote.dataNascimento).toLocaleDateString()}</td>
+              <td>{filhote.situacao}</td>
+              <td>{new Date(filhote.previsaoDesmama).toLocaleDateString()}</td>
             </tr>
           ))}
         </tbody>

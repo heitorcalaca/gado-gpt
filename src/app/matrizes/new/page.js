@@ -123,79 +123,67 @@ function NewMatrizForm() {
           className="grid grid-cols-1 gap-6 sm:grid-cols-2"
         >
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Nome
-            </label>
+            <label className="form-label">Nome</label>
             <input
               name="nome"
               value={form.nome}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm"
+              className="form-input"
               required
             />
             {errors.nome && <p className="text-red-500">{errors.nome}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Número
-            </label>
+            <label className="form-label">Número</label>
             <input
               name="numero"
               value={form.numero}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm"
+              className="form-input"
               required
             />
             {errors.numero && <p className="text-red-500">{errors.numero}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Características
-            </label>
+            <label className="form-label">Características</label>
             <input
               name="caracteristicas"
               value={form.caracteristicas}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="form-input"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Data de Nascimento
-            </label>
+            <label className="form-label">Data de Nascimento</label>
             <input
               type="date"
               name="dataNascimento"
               value={form.dataNascimento}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="form-input"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Proprietário
-            </label>
+            <label className="form-label">Proprietário</label>
             <input
               name="proprietario"
               value={form.proprietario}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="form-input"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Situação
-            </label>
+            <label className="form-label">Situação</label>
             <select
               name="situacao"
               value={form.situacao}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="form-input"
             >
               <option value="NO">Normal</option>
               <option value="MO">Morta</option>
@@ -205,38 +193,32 @@ function NewMatrizForm() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Nome do Pai
-            </label>
+            <label className="form-label">Nome do Pai</label>
             <input
               name="nomePai"
               value={form.nomePai}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="form-input"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Nome da Mãe
-            </label>
+            <label className="form-label">Nome da Mãe</label>
             <input
               name="nomeMae"
               value={form.nomeMae}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="form-input"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Situação da Mãe
-            </label>
+            <label className="form-label">Situação da Mãe</label>
             <select
               name="situacaoMae"
               value={form.situacaoMae}
               onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="form-input"
             >
               <option value="NO">Normal</option>
               <option value="MO">Morta</option>
@@ -246,16 +228,13 @@ function NewMatrizForm() {
           </div>
 
           <div className="sm:col-span-2 flex gap-4">
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white"
-            >
+            <button type="submit" className="form-button-primary">
               Cadastrar
             </button>
             <button
               type="button"
               onClick={handleBack}
-              className="flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white"
+              className="form-button-secondary"
             >
               Voltar
             </button>

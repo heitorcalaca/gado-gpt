@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import MatrizesTable from "./MatrizesTable";
 import PrintButton from "./PrintButton";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function MatrizesPage() {
   const [matrizes, setMatrizes] = useState([]);
@@ -30,7 +31,7 @@ export default function MatrizesPage() {
   }, []);
 
   if (loading) {
-    return <div>Carregando matrizes...</div>;
+    return <LoadingSpinner />;
   }
 
   return (

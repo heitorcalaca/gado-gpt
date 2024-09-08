@@ -26,7 +26,7 @@ export async function GET(request) {
     // Buscar filhotes associados à matriz específica e ao usuário logado
     filhotes = await Filhote.find({
       matriz: matrizId,
-      situacao: { $ne: "DE" },
+
       userId: user.id,
     })
       .populate("matriz")
