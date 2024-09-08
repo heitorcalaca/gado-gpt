@@ -1,6 +1,7 @@
 // src/app/api/filhotes/route.js
 import connectToDatabase from "@/lib/mongoose";
 import Filhote from "@/models/Filhote";
+import Matriz from "@/models/Matriz";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOption"; // Certifique-se de que este caminho está correto
 import { NextResponse } from "next/server";
