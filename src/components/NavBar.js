@@ -40,11 +40,20 @@ export default function NavBar() {
       href: "/filhotes",
       current: pathname.startsWith("/filhotes"),
       submenu: [
-        { name: "Lista de FIlhotes", href: "/filhotes" },
+        { name: "Lista de Filhotes", href: "/filhotes" },
         { name: "Desmama", href: "/desmama" },
       ],
     },
-    { name: "Machos", href: "/machos", current: pathname === "/machos" },
+    {
+      name: "Machos",
+      href: "/machos",
+      current: pathname.startsWith("/machos"),
+      submenu: [
+        { name: "Lista de Machos", href: "/machos" },
+        { name: "Novo Macho", href: "/machos/new" },
+        { name: "Pesagem", href: "/machos/pesagem" },
+      ],
+    },
   ];
 
   const userNavigation = [

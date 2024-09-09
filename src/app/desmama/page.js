@@ -27,19 +27,21 @@ export default function DesmamaPage() {
   }, []);
 
   const handleDesmama = (filhote) => {
-    // Redireciona para a página de criação de matriz sem marcar o filhote como desmamado
-    if (filhote.sexo === "Fêmea") {
-      // Constrói a URL com os parâmetros de query
-      const query = new URLSearchParams({
-        nomeMae: filhote.matriz?.nome || "",
-        nomePai: filhote.nomePai || "",
-        dataNascimento: filhote.dataNascimento,
-        numeroMatriz: filhote.numero || "",
-        proprietario: filhote.matriz?.proprietario || "",
-        filhoteId: filhote._id, // Envia o ID do filhote para vinculação
-      }).toString();
+    // Constrói a URL com os parâmetros de query que serão usados tanto para machos quanto para fêmeas
+    const query = new URLSearchParams({
+      nomeMae: filhote.matriz?.nome || "",
+      nomePai: filhote.nomePai || "",
+      dataNascimento: filhote.dataNascimento,
+      numeroMatriz: filhote.numero || "",
+      proprietario: filhote.matriz?.proprietario || "",
+      filhoteId: filhote._id, // Envia o ID do filhote para vinculação
+    }).toString();
 
+    // Redireciona para a página de criação de matriz (fêmea) ou macho com base no sexo do filhote
+    if (filhote.sexo === "Fêmea") {
       router.push(`/matrizes/new?${query}`);
+    } else if (filhote.sexo === "Macho") {
+      router.push(`/machos/new?${query}`);
     }
   };
 

@@ -1,26 +1,32 @@
-// src/app/api/filhotes/[id]/desmamar/route.js
 import connectToDatabase from "@/lib/mongoose";
 import Filhote from "@/models/Filhote";
 import { NextResponse } from "next/server";
 
+// PUT: Marca o filhote como desmamado
 export async function PUT(request, { params }) {
   await connectToDatabase();
 
-  const filhoteId = params.id;
+  const { id } = params;
 
-  // Atualizar a situação do filhote para "Desmamado" (ou qualquer outra situação adequada)
-  const filhote = await Filhote.findByIdAndUpdate(
-    filhoteId,
-    { situacao: "DE" },
-    { new: true }
-  );
+  try {
+    // Atualiza o filhote, marcando-o como desmamado
+    const filhote = await Filhote.findById(id);
 
-  if (!filhote) {
+    if (!filhote) {
+      return NextResponse.json(
+        { message: "Filhote não encontrado" },
+        { status: 404 }
+      );
+    }
+
+    filhote.situacao = "Desmamado"; // Marca como desmamado
+    await filhote.save();
+
+    return NextResponse.json({ message: "Filhote desmamado com sucesso!" });
+  } catch (error) {
     return NextResponse.json(
-      { message: "Filhote não encontrado" },
-      { status: 404 }
+      { message: "Erro ao desmamar filhote", error: error.message },
+      { status: 500 }
     );
   }
-
-  return NextResponse.json(filhote);
 }
