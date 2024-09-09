@@ -1,4 +1,3 @@
-// src/app/matrizes/PrintButton.js
 "use client";
 
 import { useRef } from "react";
@@ -8,11 +7,10 @@ import PrintableTemplate from "./PrintableTemplate";
 export default function PrintButton({ matrizes }) {
   const documentRef = useRef(null);
 
-  // Função para gerar o PDF
   const handlePrint = useReactToPrint({
     content: () => documentRef.current,
     documentTitle: `Relatório-Matrizes`,
-    removeAfterPrint: true, //Remove o elementodo DOM após a impressão
+    removeAfterPrint: true, //Remove o elemento do DOM após a impressão
   });
 
   return (

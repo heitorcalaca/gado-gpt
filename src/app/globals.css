@@ -34,6 +34,28 @@ body {
   background-attachment: fixed; /* Mantém o background fixo ao rolar a página */
 }
 
+@media print {
+  body,
+  html {
+    background: white !important; /* Remove gradiente e força fundo branco */
+    background-color: white !important; /* Força fundo branco */
+    background-image: none !important; /* Remove qualquer imagem ou gradiente */
+  }
+
+  .print-container {
+    background-color: white !important;
+  }
+
+  /* Cores alternadas para as linhas da tabela */
+  .bg-gray-100 {
+    background-color: #f3f4f6 !important; /* cor alternada para impressão */
+  }
+
+  .bg-white {
+    background-color: white !important;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

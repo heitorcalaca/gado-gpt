@@ -1,4 +1,3 @@
-// src/app/matrizes/MatrizesTable.js
 "use client";
 
 export default function MatrizesTable({ matrizes }) {
@@ -10,16 +9,17 @@ export default function MatrizesTable({ matrizes }) {
     <table className="table">
       <thead>
         <tr>
-          <th className="py-2">Nome</th>
-          <th className="py-2">Número</th>
-          <th className="py-2">Proprietário</th>
-          <th className="py-2">Situação</th>
+          <th>Nome</th>
+          <th>Número</th>
+          <th>Proprietário</th>
+          <th>Situação</th>
         </tr>
       </thead>
       <tbody>
-        {matrizes.map((matriz) => (
+        {matrizes.map((matriz, index) => (
           <tr
             key={matriz._id}
+            className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
             onDoubleClick={() => handleDoubleClick(matriz._id)}
           >
             <td>

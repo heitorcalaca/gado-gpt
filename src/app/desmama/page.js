@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function DesmamaPage() {
   const [filhotes, setFilhotes] = useState([]);
@@ -42,32 +43,38 @@ export default function DesmamaPage() {
     }
   };
 
-  if (loading) return <div>Carregando...</div>;
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Filhotes Prontos para Desmama</h1>
+      <header className="bg-white shadow mb-10">
+        <div className="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            Filhotes para Desmama
+          </h1>
+        </div>
+      </header>
       {filhotes.length > 0 ? (
-        <table className="min-w-full bg-white">
+        <table className="table">
           <thead>
             <tr>
-              <th className="py-2">Matriz (Mãe)</th>
-              <th className="py-2">Data de Nascimento</th>
-              <th className="py-2">Situação</th>
-              <th className="py-2">Ações</th>
+              <th>Matriz (Mãe)</th>
+              <th>Data de Nascimento</th>
+              <th>Situação</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
             {filhotes.map((filhote) => (
-              <tr key={filhote._id} className="hover:bg-gray-100">
-                <td className="border px-4 py-2">
+              <tr key={filhote._id}>
+                <td>
                   {filhote.matriz?.nome} - {filhote.matriz?.numero}
                 </td>
-                <td className="border px-4 py-2">
-                  {new Date(filhote.dataNascimento).toLocaleDateString()}
-                </td>
-                <td className="border px-4 py-2">{filhote.situacao}</td>
-                <td className="border px-4 py-2">
+                <td>{new Date(filhote.dataNascimento).toLocaleDateString()}</td>
+                <td>{filhote.situacao}</td>
+                <td>
                   <button
                     onClick={() => handleDesmama(filhote)}
                     className="bg-green-500 text-white p-2 rounded"

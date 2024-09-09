@@ -13,7 +13,7 @@ export default function MatrizesPage() {
   useEffect(() => {
     const fetchMatrizes = async () => {
       try {
-        const res = await fetch("/api/matrizes"); // Fazendo a requisição GET para buscar matrizes
+        const res = await fetch("/api/matrizes");
         if (res.ok) {
           const data = await res.json();
           setMatrizes(data);

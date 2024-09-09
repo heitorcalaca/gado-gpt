@@ -1,5 +1,6 @@
 // src/models/Filhote.js
 import mongoose from "mongoose";
+import Matriz from "./Matriz";
 
 const FilhoteSchema = new mongoose.Schema({
   matriz: {

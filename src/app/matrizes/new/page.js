@@ -94,6 +94,9 @@ function NewMatrizForm() {
             method: "PUT",
           });
         }
+
+        window.dispatchEvent(new Event("matrizAdded"));
+
         router.push("/matrizes");
       } else {
         setErrors(resData.errors || {});
