@@ -2,6 +2,7 @@
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -29,10 +30,12 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
+        <Image
           alt="Sua Empresa"
           src="/icon-cow.svg"
-          className="mx-auto h-10 w-auto"
+          className="mx-auto h-20 w-auto"
+          width={40}
+          height={40}
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Entrar na sua conta

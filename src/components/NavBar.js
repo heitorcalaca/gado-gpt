@@ -14,6 +14,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -97,10 +98,12 @@ export default function NavBar() {
             <div className="flex h-16 items-center justify-between">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <img
+                  <Image
                     className="h-9 w-9 invert"
                     src="/icon-cow.svg"
                     alt="Your Company"
+                    width={36}
+                    height={36}
                   />
                 </div>
                 <div className="hidden md:block">
