@@ -32,9 +32,18 @@ export default function PesagemPorLote() {
   const fetchMachosPorLote = async (lote) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/machos?lote=${lote}`); // API para buscar machos por lote
+      console.log("Lote:", lote);
+
+      const res = await fetch(`/api/machos/lotes/?lote=${lote}`); // API para buscar machos por lote
       const data = await res.json();
-      setMachos(data);
+
+      if (data.length > 0 && data[0].machos) {
+        // Se o lote contém machos, atribuímos os machos ao estado
+        setMachos(data[0].machos); // Acessa diretamente os machos do lote
+      } else {
+        setMachos([]); // Se não houver machos, zera o estado
+      }
+
       setPesagens({});
       setIsLoading(false);
     } catch (error) {
