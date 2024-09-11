@@ -28,7 +28,10 @@ export async function GET() {
     const totalMachos = await Macho.countDocuments({ userId });
 
     // Contar o total de filhotes pertencentes ao usuário
-    const totalFilhotes = await Filhote.countDocuments({ userId });
+    const totalFilhotes = await Filhote.countDocuments({
+      userId,
+      situacao: "NO",
+    });
 
     // Retornar os dados em formato JSON
     return NextResponse.json(
