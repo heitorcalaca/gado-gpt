@@ -1,14 +1,28 @@
 import connectToDatabase from "@/lib/mongoose";
 import Macho from "@/models/Macho";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOption";
 import { NextResponse } from "next/server";
 
-// GET: Retorna todos os lotes únicos
+// GET: Retorna todos os lotes únicos do usuário logado
 export async function GET() {
   await connectToDatabase();
+  const session = await getServerSession(authOptions);
+
+  if (!session || !session.user) {
+    return NextResponse.json(
+      { message: "Não autorizado. Por favor, faça login." },
+      { status: 401 }
+    );
+  }
 
   try {
-    // Buscar todos os lotes distintos de machos no banco de dados
-    const lotes = await Macho.distinct("lote");
+    const userId = session.user.id;
+
+    // Buscar lotes distintos para o usuário logado
+    const lotes = await Macho.distinct("lote", { userId });
+
+    // Retornar os lotes encontrados
     return NextResponse.json(lotes);
   } catch (error) {
     return NextResponse.json(

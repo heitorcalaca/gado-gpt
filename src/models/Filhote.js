@@ -10,6 +10,7 @@ const FilhoteSchema = new mongoose.Schema({
   },
   dataNascimento: { type: Date, required: true },
   previsaoDesmama: { type: Date, required: true },
+  dataDesmama: Date,
   caracteristicas: String,
   situacao: {
     type: String,

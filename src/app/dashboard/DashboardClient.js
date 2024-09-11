@@ -1,54 +1,78 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import NavBar from "@/components/NavBar"; // Importa o NavBar para ser utilizado no layout
+import { useSession, signIn } from "next-auth/react";
+import DashboardHeader from "@/components/DashboardHeader";
+import KPISection from "@/components/KPISelection";
+import GMDChart from "@/components/GMDChart";
+import PesoMedioPorLoteChart from "@/components/PesoMedioPorLoteChart";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function DashboardClient() {
-  const [desmamaAviso, setDesmamaAviso] = useState(null);
+  const [lotes, setLotes] = useState([]);
+  const { data: session, status } = useSession();
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      signIn();
+    }
+  }, [status]);
+
+  useEffect(() => {
+    async function fetchLotes() {
+      if (status === "authenticated") {
+        try {
+          // Pass the session token for authentication in the API request
+          const res = await fetch("/api/machos/lotes", {
+            headers: {
+              Authorization: `Bearer ${session?.user?.token}`,
+            },
+          });
+
+          const data = await res.json();
+          setLotes(data);
+        } catch (error) {
+          console.error("Erro ao buscar lotes:", error);
+        }
+      }
+    }
+
+    fetchLotes();
+  }, [session, status]);
+
+  if (status === "loading" || lotes.length === 0) {
+    return <LoadingSpinner />;
+  }
 
   return (
-    <div className="min-h-full">
-      <header className="bg-white shadow">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-            Dashboard
-          </h1>
-        </div>
-      </header>
+    <div>
+      {/* Header */}
+      <DashboardHeader />
 
-      <main>
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          {desmamaAviso && (
-            <div className="bg-yellow-500 text-white p-4 rounded mb-4">
-              {desmamaAviso}
-            </div>
-          )}
+      {/* Conteúdo do Dashboard */}
+      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <p>
+          Bem-vindo ao Dashboard! Aqui você verá uma visão completa do rebanho.
+        </p>
+      </div>
 
-          <div className="grid grid-cols-3 gap-6">
-            <Link
-              href="/matrizes"
-              className="block p-4 border rounded shadow hover:bg-gray-100"
-            >
-              <h2 className="text-xl font-bold mb-2">Matrizes</h2>
-            </Link>
+      {/* KPIs Section */}
+      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <KPISection />
+      </div>
 
-            <Link
-              href="/filhotes"
-              className="block p-4 border rounded shadow hover:bg-gray-100"
-            >
-              <h2 className="text-xl font-bold mb-2">Filhotes</h2>
-            </Link>
+      {/* Gráfico de GMD */}
+      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <h2 className="text-xl font-bold mb-4">GMD (Ganho Médio Diário)</h2>
+        <GMDChart lotes={lotes} />
+      </div>
 
-            <Link
-              href="/machos"
-              className="block p-4 border rounded shadow hover:bg-gray-100"
-            >
-              <h2 className="text-xl font-bold mb-2">Machos</h2>
-            </Link>
-          </div>
-        </div>
-      </main>
+      {/* Gráfico de Peso Médio por Lote */}
+      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <h2 className="text-xl font-bold mb-4">Peso Médio por Lote</h2>
+        <PesoMedioPorLoteChart lotes={lotes} />
+      </div>
     </div>
   );
 }
