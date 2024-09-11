@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import Link from "next/link";
 
 export default function MatrizDetailPage() {
   const [matriz, setMatriz] = useState(null);
