@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
-export default function NewMachoForm() {
+function NewMachoForm() {
   const [form, setForm] = useState({
     numero: "",
     lote: "",
@@ -254,5 +255,13 @@ export default function NewMachoForm() {
         </div>
       </form>
     </div>
+  );
+}
+
+export default function NewMachoPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <NewMachoForm />
+    </Suspense>
   );
 }
