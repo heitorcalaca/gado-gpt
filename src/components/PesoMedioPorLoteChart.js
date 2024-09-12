@@ -138,7 +138,7 @@ export default function PesoMedioPorLoteChart() {
                 callbacks: {
                   label: function (context) {
                     const pesoKg = context.raw;
-                    const pesoArroba = (pesoKg / 15).toFixed(2);
+                    const pesoArroba = (pesoKg / 30).toFixed(2);
                     return `${pesoKg} kg / ${pesoArroba} @`;
                   },
                 },
@@ -146,7 +146,7 @@ export default function PesoMedioPorLoteChart() {
               datalabels: {
                 display: true,
                 formatter: function (value) {
-                  const pesoArroba = (value / 15).toFixed(2);
+                  const pesoArroba = (value / 30).toFixed(2);
                   return `${value} kg / ${pesoArroba} @`;
                 },
               },
